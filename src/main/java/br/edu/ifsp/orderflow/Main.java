@@ -5,12 +5,16 @@ import br.edu.ifsp.orderflow.domain.Cliente;
 import br.edu.ifsp.orderflow.domain.ItemPedido;
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.Produto;
+import br.edu.ifsp.orderflow.infra.InMemoryEstoqueService;
+import br.edu.ifsp.orderflow.service.IEstoqueService;
 
 import java.math.BigDecimal;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        IEstoqueService estoqueService = new InMemoryEstoqueService();
 
         Produto mouse = new Produto(
                 "SKU-1",
@@ -30,12 +34,25 @@ public class Main {
                 new BigDecimal("1800.00")
         );
 
+        estoqueService.adicionarEstoque(mouse, 10);
+        estoqueService.adicionarEstoque(teclado, 6);
+        estoqueService.adicionarEstoque(monitor, 2);
+
         Cliente ana = new Cliente("Ana","ana@gmail.com");
         Cliente may = new Cliente("Mayara","may@gmail.com");
 
         Pedido pedido1 = new Pedido(ana);
         pedido1.adicionarItem(new ItemPedido(mouse,2));
         pedido1.adicionarItem(new ItemPedido(teclado,4));
+
+        boolean reservado = estoqueService.reservar(pedido1);
+
+        if (reservado == false) {
+            System.out.println("Não foi reservado.");
+        }
+        else {
+            System.out.println("Reservado com sucesso!");
+        }
 
         Pedido pedido2 = new Pedido(may);
         pedido2.adicionarItem(new ItemPedido(monitor,2));
