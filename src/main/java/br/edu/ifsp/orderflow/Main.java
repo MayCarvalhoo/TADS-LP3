@@ -5,8 +5,13 @@ import br.edu.ifsp.orderflow.domain.Cliente;
 import br.edu.ifsp.orderflow.domain.ItemPedido;
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.Produto;
+import br.edu.ifsp.orderflow.infra.ConsoleNotificacaoService;
+import br.edu.ifsp.orderflow.infra.FakePagamentoGateway;
 import br.edu.ifsp.orderflow.infra.InMemoryEstoqueService;
 import br.edu.ifsp.orderflow.service.IEstoqueService;
+import br.edu.ifsp.orderflow.service.INotificacaoService;
+import br.edu.ifsp.orderflow.service.IPagamentoGateway;
+import br.edu.ifsp.orderflow.service.IPedidoRepository;
 
 import java.math.BigDecimal;
 
@@ -15,6 +20,12 @@ public class Main {
     public static void main(String[] args) {
 
         IEstoqueService estoqueService = new InMemoryEstoqueService();
+        IPedidoRepository pedidoRepository = new InMemoryPedidoRepository();
+        INotificacaoService notificacaoService = new ConsoleNotificacaoService();
+        IPagamentoGateway pagamentoGateway = new FakePagamentoGateway();
+        
+
+
 
         Produto mouse = new Produto(
                 "SKU-1",
