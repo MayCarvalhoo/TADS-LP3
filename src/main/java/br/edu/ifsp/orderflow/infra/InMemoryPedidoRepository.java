@@ -15,14 +15,13 @@ public class InMemoryPedidoRepository implements IPedidoRepository {
     }
 
     @Override
-    public Optional<Pedido> findByID(String id) {
+    public Optional<Pedido> findById(String id) {
 
-        if(this.pedidos.containsKey(id) == false){
+        if (this.pedidos.containsKey(id) == false) {
             return Optional.empty();
         }
 
         Pedido pedido = this.pedidos.get(id);
-
         return Optional.of(pedido);
     }
 
@@ -31,7 +30,7 @@ public class InMemoryPedidoRepository implements IPedidoRepository {
 
         List<Pedido> todos = new ArrayList<>();
 
-        for(Pedido item : this.pedidos.values()){
+        for (Pedido item : this.pedidos.values()) {
             todos.add(item);
         }
 

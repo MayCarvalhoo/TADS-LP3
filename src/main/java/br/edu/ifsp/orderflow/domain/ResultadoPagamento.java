@@ -12,23 +12,23 @@ public class ResultadoPagamento {
         this.motivo = motivo;
     }
 
-    public static ResultadoPagamento aprovado(String idTransacao){
-        return new ResultadoPagamento(true, idTransacao,null);
+    public static ResultadoPagamento aprovado(String idTransacao) {
+        return new ResultadoPagamento(true, idTransacao, null);
     }
 
-    public static ResultadoPagamento recusado(String motivo){
+    public static ResultadoPagamento recusado(String motivo) {
         return new ResultadoPagamento(false, null, motivo);
     }
 
-    public boolean isAprovado(){
+    public boolean isAprovado() {
         return this.aprovado;
     }
 
-    public String getIdTransacao(){
+    public String getIdTransacao() {
         return this.idTransacao;
     }
 
-    public String getMotivo(){
+    public String getMotivo() {
         return this.motivo;
     }
 }

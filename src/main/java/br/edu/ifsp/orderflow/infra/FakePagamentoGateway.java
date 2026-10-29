@@ -5,35 +5,38 @@ import br.edu.ifsp.orderflow.domain.ResultadoPagamento;
 import br.edu.ifsp.orderflow.service.IPagamentoGateway;
 
 import java.math.BigDecimal;
+import java.security.PublicKey;
 import java.util.UUID;
 
 public class FakePagamentoGateway implements IPagamentoGateway {
 
     private static final BigDecimal CARD_LIMIT = new BigDecimal("5000.00");
 
-    @Override
     public ResultadoPagamento pagar(Pedido pedido) {
 
         this.sleep(1500);
 
-        BigDecimal totalPedido = pedido.calcularTotal();
+        BigDecimal totalPedido = pedido.CalcularTotal();
 
-        // CompareTo:
-        // - retorna 0 se os dois valores são iguais
+        // CompareTo: retorna 0 se os dois objetos são iguais
+        // retorna 1 se o elemento da esqueda é maior
+        // retorna -1 caso contrário
 
-        if(totalPedido.compareTo(CARD_LIMIT) > 0 ){
-            return ResultadoPagamento.recusado("Limite do cartão excedido");
+        if (totalPedido.compareTo(CARD_LIMIT) > 0) {
+            return ResultadoPagamento.recusado("limite do cartão excedido");
         }
-        String idTransacao = UUID.randomUUID().toString().substring(0,8);
+
+        String idTransacao = UUID.randomUUID().toString().substring(0, 8);
 
         return ResultadoPagamento.aprovado(idTransacao);
     }
 
-    private void sleep(long millis){
-        try{
+    private void sleep(long millis) {
+        try {
             Thread.sleep(millis);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
+
 }

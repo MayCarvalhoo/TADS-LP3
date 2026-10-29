@@ -9,7 +9,8 @@ public interface IPedidoRepository {
 
     void save(Pedido pedido);
 
-    Optional<Pedido> findByID(String id);
+    Optional<Pedido> findById(String id);
 
     List<Pedido> findAll();
+
 }

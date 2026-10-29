@@ -2,56 +2,83 @@ package br.edu.ifsp.orderflow.service;
 
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.ResultadoPagamento;
+import br.edu.ifsp.orderflow.events.*;
+
+import javax.xml.transform.Result;
+import java.time.Instant;
 
 public class PedidoService {
 
     private final IEstoqueService estoqueService;
     private final IPedidoRepository pedidoRepository;
     private final IPagamentoGateway pagamentoGateway;
-    private final INotificacaoService notificacaoService;
+    private final IEventBus eventBus;
 
     public PedidoService(
             IEstoqueService estoqueService,
             IPedidoRepository pedidoRepository,
             IPagamentoGateway pagamentoGateway,
-            INotificacaoService notificacaoService
+            IEventBus eventBus
     ) {
         this.estoqueService = estoqueService;
         this.pedidoRepository = pedidoRepository;
         this.pagamentoGateway = pagamentoGateway;
-        this.notificacaoService = notificacaoService;
+        this.eventBus = eventBus;
     }
 
-    public Pedido processar (Pedido pedido){
+    public Pedido processar(Pedido pedido) {
+
+        this.eventBus.publish(new PedidoCriado(pedido.getId(), Instant.now()));
+
         boolean foiReservado = this.estoqueService.reservar(pedido);
-        // Verifica a reservar
-        if(!foiReservado){
-            pedido.marcarCancelado();
+
+        if (!foiReservado) {
+
+            pedido.cancelar();
             this.pedidoRepository.save(pedido);
+
+            this.eventBus.publish(
+                    new PedidoCancelado(
+                            pedido.getId(),
+                            "estoque insuficiente",
+                            Instant.now()
+                    )
+            );
+
             return pedido;
         }
-        //Processar pagamento
+
         ResultadoPagamento resultado = this.pagamentoGateway.pagar(pedido);
+        boolean naoAprovado = !resultado.isAprovado();
 
-        // Salvar se o pagamento teve exito.
-        if(!resultado.isAprovado()){
+        if (naoAprovado) {
+
             this.estoqueService.liberar(pedido);
-            pedido.marcarCancelado();
+            pedido.cancelar();
             this.pedidoRepository.save(pedido);
+
+            this.eventBus.publish(
+                    new PagamentoRecusado(
+                            pedido.getId(),
+                            resultado.getMotivo(),
+                            Instant.now()
+                    )
+            );
+
             return pedido;
         }
 
-        // Salvar se o pagamento teve exito.
         pedido.marcarComoPago();
         this.pedidoRepository.save(pedido);
 
-        // Notificar o cliente.
-        this.notificacaoService.notificar(
-                pedido.getCliente(),
-                "Pagamento Aprovado!! "+ pedido.getIdCurto() +" Confirmado"
+        this.eventBus.publish(
+                new PagamentoAprovado(
+                        pedido.getId(),
+                        resultado.getIdTransacao(),
+                        Instant.now()
+                )
         );
 
-        // Retorna o pedido
         return pedido;
     }
 }

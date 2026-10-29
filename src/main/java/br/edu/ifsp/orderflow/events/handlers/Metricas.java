@@ -1,4 +1,4 @@
-package br.edu.ifsp.orderflow.events.Handlers;
+package br.edu.ifsp.orderflow.events.handlers;
 
 public class Metricas {
 
@@ -23,6 +23,6 @@ public class Metricas {
 
     public String resumo() {
         return "Métricas: "+ this.qtdAprovado + " aprovado(s), "
-                + this.qtdReprovado + "recusado(s)";
+                + this.qtdReprovado + " recusado(s)";
     }
 }

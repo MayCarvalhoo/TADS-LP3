@@ -1,4 +1,4 @@
-package br.edu.ifsp.orderflow.events.Handlers;
+package br.edu.ifsp.orderflow.events.handlers;
 
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.events.IEventHandler;
@@ -13,26 +13,21 @@ public class PagamentoRecusadoNotificacaoHandler implements IEventHandler<Pagame
     private final IPedidoRepository pedidoRepository;
     private final INotificacaoService notificacaoService;
 
-    public PagamentoRecusadoNotificacaoHandler(
-            IPedidoRepository pedidoRepository,
-            INotificacaoService notificacaoService
-    ){
+    public PagamentoRecusadoNotificacaoHandler(IPedidoRepository pedidoRepository, INotificacaoService notificacaoService) {
         this.notificacaoService = notificacaoService;
         this.pedidoRepository = pedidoRepository;
     }
 
+
     @Override
     public void handle(PagamentoRecusado event) {
-        Optional<Pedido> pedidoEncontrado = this.pedidoRepository.findByID(event.pedidoId());
-        if (pedidoEncontrado.isPresent()){
 
+        Optional<Pedido> pedidoEncontrado = this.pedidoRepository.findById(event.pedidoId());
+
+        if (pedidoEncontrado.isPresent()) {
             Pedido pedido = pedidoEncontrado.get();
 
-            this.notificacaoService.notificar(
-                    pedido.getCliente(),
-                    "Pedido Recusado ("+ event.motivo()+"). Pedido"
-                    + pedido.getIdCurto() + " cancelado"
-            );
+            this.notificacaoService.notificar(pedido.getCliente(), "Pedido recusado (" + event.transacaoId() + "). Pedido" + pedido.getIdCurto() + " cancelado.");
         }
     }
 

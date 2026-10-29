@@ -1,4 +1,4 @@
-package br.edu.ifsp.orderflow.events.Handlers;
+package br.edu.ifsp.orderflow.events.handlers;
 
 import br.edu.ifsp.orderflow.events.IEventHandler;
 import br.edu.ifsp.orderflow.events.PagamentoAprovado;
@@ -7,7 +7,7 @@ public class PagamentoAprovadoMetricasHandler implements IEventHandler<Pagamento
 
     private final Metricas metricas;
 
-    PagamentoAprovadoMetricasHandler(Metricas metricas){
+    public PagamentoAprovadoMetricasHandler(Metricas metricas) {
         this.metricas = metricas;
     }
 

@@ -1,18 +1,16 @@
 package br.edu.ifsp.orderflow.events;
 
 /**
- * Algo que irá consumir/reagir a tipo especifico de evento
- *
- * o parametro de tipo e garante, em tempo de compilação, que
- * um handler de PagamentoAprovado nunca receba um pagamentoRecusado
+ * consome/executa o handler para o tipo de evento que
+ * estiver dentro do SimpleEventBus (implementacao do IEventBus)
+ * @param <E>
  */
 public interface IEventHandler<E extends IDomainEvent> {
     void handle(E event);
 
     /**
-     * Qual tipo de evento este handler trata/consome?
-     *
-     * Necessario por causa do apagamento de tipo do java (Type erasure)
+     * necessario por conta do type erasure
+     * Wildcard <?>
      * @return
      */
     Class<E> eventType();

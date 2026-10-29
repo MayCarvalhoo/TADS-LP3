@@ -8,12 +8,10 @@ public class Produto {
     private final String nome;
     private final BigDecimal preco;
 
-    //construtor
-
     public Produto(String id, String nome, BigDecimal preco) {
-        this.id= id;
-        this.nome= nome;
-        this.preco= preco;
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
     }
 
     public String getId() {
@@ -32,5 +30,4 @@ public class Produto {
     public String toString() {
         return this.nome + " (R$ " + this.preco + ")";
     }
-
 }

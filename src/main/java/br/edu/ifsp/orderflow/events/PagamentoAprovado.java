@@ -6,6 +6,4 @@ public record PagamentoAprovado(
         String pedidoId,
         String transacaoId,
         Instant ocorridoEm
-) implements IDomainEvent{
-
-}
+) implements IDomainEvent {}

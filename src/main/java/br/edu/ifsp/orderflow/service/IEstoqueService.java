@@ -6,37 +6,29 @@ import br.edu.ifsp.orderflow.domain.Produto;
 public interface IEstoqueService {
 
     /**
-     * Repõe o estoque.
-     *
+     * Repõe unidades de um produto no estoque
      * @param produto
-     * @param qtd
-     * return void
+     * @param quantidade
      */
-    public void adicionarEstoque (Produto produto, int qtd);
+    public void adicionarEstoque(Produto produto, int quantidade);
 
     /**
-     *Quantidade disponivel para o produto
-     *
+     * Quantidade disponivel de um produto
      * @param produto
      * @return int
      */
     public int quantidadeDisponivel(Produto produto);
 
     /**
-     *Tenta reservar o estoque de todos os itens do pedido
-     *
+     * Tenta reservar o estoque de todos os itens do pedido
      * @param pedido
-     * @return
+     * @return true se conseguir reservar, false se não
      */
-
     public boolean reservar(Pedido pedido);
 
     /**
-     *Devolve ao estoque os itens de um pedido (ex.: Pagamento recusado)
+     * Devolve ao estoque os itens de um pedido
      * @param pedido
-     * @return
      */
-
-
-    public void liberar(Pedido pedido);
+    void liberar(Pedido pedido);
 }

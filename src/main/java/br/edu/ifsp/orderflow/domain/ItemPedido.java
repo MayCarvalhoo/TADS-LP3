@@ -20,12 +20,14 @@ public class ItemPedido {
         return quantidade;
     }
 
+    public BigDecimal calcularSubTotal() {
+        return this.produto.getPreco().multiply(BigDecimal.valueOf(this.quantidade));
+    }
+
     @Override
     public String toString() {
         return this.quantidade + "x " + this.produto.getNome();
     }
 
-    public BigDecimal calcularSubtotal(){
-        return this.produto.getPreco().multiply(BigDecimal.valueOf(this.quantidade));
-    }
+
 }
